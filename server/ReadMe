@@ -1,0 +1,67 @@
+Apache Httpd Web服务器（WSGI）
+
+Nginx代理（暂时不考虑）
+
+
+
+Model服务器
+
+API服务器
+    前端配置
+        /login
+        /manage
+        /coompare_imgs
+        /compare_videos
+        /group
+        /algorithms
+
+    文件配置
+        /video/videoname
+        /img/imgname
+        /result/jobname
+
+    接口配置
+        删除视频           ： /rm_videos?videosname=a1,a2
+        删除照片           ： /rm_imgs?imgsname=b1,b2
+        获取照片           ： /get_imgs
+        获取视频           ： /get_videos
+        获取任务           ： /get_jobs
+        删除任务           ： /rm_job?jobname=c1
+        获取任务状态       ： /get_job_status?jobname=d1
+        提交图像对比任务   ： /commit_job?kind=img&imgsname1=a1,a2,a3&imgsname2=b1,b2,b3,b4
+        提交视频对比任务   ： /commit_job?kind=video&imgsname=a1,a2,a3&videosname=b1,b2,b3,b4
+
+
+
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+  <system.webServer>
+    <handlers>
+      <!-- scriptProcessor 的值来自命令行工具 wfastcgi-enable -->
+      <add
+      name="FlaskFastCGI"
+      path="*"
+      verb="*"
+      modules="FastCgiModule"
+      scriptProcessor="e:\anaconda\envs\python36\python.exe|e:\anaconda\envs\python36\lib\site-packages\wfastcgi.py"
+      resourceType="Unspecified"
+      requireAccess="Script" />
+    </handlers>
+true<security>
+truetrue<!-- URL 重写中的特殊字符，比如加号+等等 -->
+truetrue<requestFiltering allowDoubleEscaping="true"></requestFiltering>
+true</security>
+  </system.webServer>
+
+  <appSettings>
+    <!-- Required settings -->
+    <!-- 在这里指定Falsk app在模块中的具体位置 -->
+    <add key="WSGI_HANDLER" value="test.app" />
+    <add key="PYTHONPATH" value="~/" />
+
+    <!-- Optional settings -->
+    <!-- 需要先创建日志目录，否则报错 -->
+    <add key="WSGI_LOG" value="D:\Code\Python3\face_recognize\log\IIS_app_web.log" />
+    <add key="WSGI_RESTART_FILE_REGEX" value="" />
+  </appSettings>
+</configuration>
