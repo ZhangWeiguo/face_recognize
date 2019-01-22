@@ -1,0 +1,72 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>LoginPage</title>
+    <link rel="icon" href="../static/sysu.ico" type="image/x-icon"/>
+    <script type="text/ecmascript" src="../static/md5.js"></script>
+    <script type="text/javascript">
+    function validate(){
+        var name = subform.username.value;
+        var pass = subform.password.value;
+            if(name==''){
+                alert("Your UserID Is Empty!")
+                return false;
+            }
+            if(pass==''){
+                alert("Your PassWord Is Empty!")
+                return false;
+            }
+            subform.password.value = hex_md5(pass);
+            return true;
+        }
+    </script>
+    <style>
+    body{
+        font-family:Arial, Helvetica, sans-serif;
+        background:url(../static/back1.jpg) no-repeat center;
+        font-size:13px;
+        background-repeat:repeat;
+    }
+    td{
+        font-family: Arial, Helvetica, sans-serif;
+    }
+    h1{
+        font-family: Arial, Helvetica, sans-serif;
+    }
+    #user{
+        width:150px;
+        height:20px;
+    }
+    #pass{
+        width:150px;
+        height:20px;
+    }
+    </style>
+</head>
+<body>
+<br><br>
+<br><br><br>
+<h1 align="center"><big>FaceMate</big></h1>
+<form method="get" onsubmit="return validate()" name="subform">
+    <table border="0" align="center">
+        <tr>
+            <td>用户名</td>
+            <td><input type="text" name="username" value="" id="user"/></td>
+        </tr>
+        <tr>
+            <td>密码</td>
+            <td><input type="password" name="password" value="" id="pass"/></td>
+        </tr>
+    </table>
+    <table align="center">
+    <tr>
+        <td><input type="submit" value="确定" autofocus="autofocus"/></td>
+        <td><input type="reset" value="重置"/></td>
+        <td><input type="button" value="注册" onclick="register()"/></td>
+    </tr>
+    </table>
+</form>
+
+</body>
+</html>

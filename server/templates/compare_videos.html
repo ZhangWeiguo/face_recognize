@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+        <title>VideoRecognize</title>
+    <link rel="icon" href="../static/sysu.ico" type="image/x-icon"/>
+    <script>
+        xmlhttp=null;
+        if (window.XMLHttpRequest)
+        {xmlhttp=new XMLHttpRequest();}
+        else if (window.ActiveXObject)
+        {xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");}
+
+        var commit_job_url = "/commit_job?";
+        var rm_job_url = "/rm_job?";
+        var get_job_status_url = "/get_job_status?"
+
+        function selected(id){
+          var checkBoxArr = document.getElementsByName(id);
+          var str = "";
+          for (var i = 0; i < checkBoxArr.length; i++) {
+              if(checkBoxArr[i].checked){
+                  str+=checkBoxArr[i].value+",";
+              }
+        	}
+          str=str.substring(0,str.length-1);
+          return str
+        }
+
+        function response(){
+            if (xmlhttp.readyState==4)
+            {
+                if (xmlhttp.status==200)
+                {
+                    status = JSON.parse(xmlhttp.responseText);
+                    if (status.succ == true ){alert("操作成功！")}
+                    else{alert("操作失败！")}
+                }
+                else{alert("操作失败！");}
+            }
+        }
+
+        function manage(){
+            location.href = "/manage";
+        }
+        function compare_imgs(){
+            location.href = "/compare_imgs";
+        }
+        function compare_videos(){
+            location.href = "/compare_videos";
+        }
+        function algorithms(){
+            location.href = "/algorithms"
+        }
+        function group(){
+            location.href = "/group"
+        }
+
+
+        function cancelAllImg(){
+            var checkBoxArr=document.getElementsByName("img");
+            for (var i =0; i <checkBoxArr.length; i++) {
+                checkBoxArr[i].checked=(!checkBoxArr[i].checked);
+          }
+        }
+        function cancelAllVideo(){
+            var checkBoxArr=document.getElementsByName("video");
+            for (var i =0; i <checkBoxArr.length; i++) {
+                checkBoxArr[i].checked=(!checkBoxArr[i].checked);
+          }
+        }
+        function chooseAllImg(){
+            var checkBoxArr = document.getElementsByName("img");
+            for (var i = 0; i < checkBoxArr.length; i++) {
+                checkBoxArr[i].checked = "true";
+            }
+        }
+        function chooseAllVideo(){
+            var checkBoxArr = document.getElementsByName("video");
+            for (var i = 0; i < checkBoxArr.length; i++) {
+                checkBoxArr[i].checked = "true";
+            }
+        }
+
+        function commitJob(){
+            imgs = selected("img");
+            videos = selected("video");
+            url = commit_job_url + "kind=video&imgsname=" + imgs + "&videosname=" + videos;
+            if (imgs=="" || videos==""){alert("请选择图片或视频！")}
+            if (imgs!="" && videos != "")
+            {
+                xmlhttp.onreadystatechange=response;
+                xmlhttp.open("GET",url,true);
+                xmlhttp.send(null);
+            }
+            location=location;
+        }
+
+        function deleteJob(){
+          var checkBoxArr = document.getElementsByName("result");
+          for (var i = 0; i < checkBoxArr.length; i++) {
+              if(checkBoxArr[i].checked){
+                jobname = checkBoxArr[i].value;
+                url = rm_job_url + "jobname=" + jobname;
+                xmlhttp.open("GET",url,true);
+                xmlhttp.send(null);
+              }
+        	}
+            location=location;
+        }
+        function set_job_status(){
+            var tab=document.getElementById("restatus");
+            if (xmlhttp.readyState==4)
+            {
+                if (xmlhttp.status==200)
+                {
+                    data = JSON.parse(xmlhttp.responseText);
+                    if (data.succ == true)
+                        {
+                            for(var j=0;j<tab.rows.length;j++)
+                            {
+                                if(tab.rows[j].cells[0].innerText==data.jobname)
+                                {
+                                tab.rows[j].cells[1].innerText = data.status;
+                                }
+                            }
+                        }
+                }
+            }
+        }
+        function update_job_status(){
+            var tab=document.getElementById("restatus");
+            for(var j=1;j<tab.rows.length;j++)
+            {   var tempurl="/get_job_status?jobname="+tab.rows[j].cells[0].innerText;
+                xmlhttp.onreadystatechange=set_job_status;
+                xmlhttp.open("GET",tempurl,true);
+                xmlhttp.send(null);
+            }
+         }
+    </script>
+<style>
+button{
+    width:100%;
+    height:60px;
+    margin : 0px 0px 0px 0px;
+    background-color:transparent;
+    font-size:20px;
+}
+
+#header {
+    background-color:#2F4F4F;
+    color:white;
+    text-align:center;
+    padding:5px;
+    height:10%;
+}
+#nav {
+    line-height:30px;
+    background-color:#4f6b72;
+    width:20%;
+    float:left;
+    padding:0px;
+    min-height:700px;
+}
+#section {
+    background-color:#EEEEEE;
+    width:80%;
+    min-height:200px;
+    max-height:200px;
+    float:left;
+    padding:0px;
+    min-height:700px;
+    overflow-y:scroll;
+}
+#footer {
+    background-color:#2F4F4F;
+    color:white;
+    clear:both;
+    text-align:center;
+    height:5%;
+    padding:5px;
+}
+#img{
+    clear:both;
+    background-color:#EEEEEE;
+    text-align:center;
+    height:100%;
+    width:25%;
+    float:left;
+    border:0px solid #000;
+}
+#video{
+    background-color:#EEEEEE;
+    height:100%;
+    text-align:center;
+    width:25%;
+    float:left;
+    border:0px solid #000;
+}
+#result{
+    background-color:#EEEEEE;
+    height:100%;
+    text-align:center;
+    width:50%;
+    float:left;
+    border:0px solid #000;
+}
+
+form{
+    align:center
+
+}
+.file{
+    width:100%;
+    height:40px;
+    float:left;
+    margin :0px 0px 5px 0px;
+}
+.submit{
+    width:50%;
+    height:40px;
+    float:left;
+    margin :5px 0px 5px 0px;
+}
+.commit{
+    width:33.3%;
+    height:40px;
+    float:left;
+    margin :5px 0px 5px 0px;
+}
+table.dataintable {
+  margin-top:15px;
+  border-collapse:collapse;
+  border:1px solid #aaa;
+  width:100%;
+  font-size:12px;
+  color:#2F4F4F;
+  word-break:break-all;
+  word-wrap:break-all;
+}
+
+table.dataintable th {
+  vertical-align:baseline;
+  padding:5px 15px 5px 6px;
+  border:1px solid #aaa;
+  text-align:center;
+}
+table.dataintable td {
+  padding:6px 15px 6px 6px;
+  border:1px solid #aaa;
+  vertical-align: middle;
+  text-align: center;
+  max-width:80px;
+  max-height:30px;
+}
+
+checkbox{
+    width:40px;
+    height:40px;
+}
+
+
+h3 {
+    border-style: solid;
+    border-color:#DCDCDC;
+    width:100%;
+    height:40px;
+    float:left;
+    vertical-align: middle;
+    margin :0px 0px 0px 0px;
+  }
+
+
+
+</style>
+</head>
+
+<body>
+<div id="header">
+<h1 align="center">FaceMate系统</h1>
+</div>
+
+<div id="nav">
+<button type="button" onclick="manage()">数据管理</button><br>
+<button type="button" onclick="compare_imgs()">图像识别</button><br>
+<button type="button" onclick="compare_videos()">视频识别</button><br>
+<button type="button" onclick="algorithms()">算法说明</button><br>
+<button type="button" onclick="group()">团队说明</button><br>
+</div>
+
+<div id="section">
+	<div id="img">
+		<h3>图像数据</h3>
+                    <input type="button" value="全选" class="submit" onclick="chooseAllImg()" />
+                   <input type="button" value="反选" class="submit" onclick="cancelAllImg()" />
+
+
+<table class="dataintable">
+<tr>
+    <th>图片</th>
+    <th>图片名</th>
+    <th>选择</th>
+</tr>
+            <div id="imgdata">
+{% for img in imgs %}
+<tr>
+    <td><img width="80px" height="60px" src={{ img[0] }}></td>
+    <td>{{ img[1] }}</td>
+    <td><input type="checkbox" name="img" value={{ img[1] }}></td>
+</tr>
+{% endfor %}
+        </div>
+</table>
+
+    </div>
+
+    <div id="video">
+		<h3>视频数据</h3>
+                    <input type="button" value="全选" class="submit" onclick="chooseAllVideo()"/>
+                   <input type="button" value="反选" class="submit" onclick="cancelAllVideo()"/>
+
+<table class="dataintable" >
+<tr>
+  <th>视频</th>
+  <th>视频名</th>
+      <th>选择</th>
+</tr>
+            <div id="videodata">
+{% for video in videos %}
+<tr>
+    <td>
+        <video width="80px" height="60px" src={{ video[0] }} controls="controls"/>
+</td>
+    <td>{{ video[1] }}</td>
+    <td><input type="checkbox" name="video" value={{ video[1] }}></td>
+</tr>
+{% endfor %}
+</div>
+</table>
+    </div>
+
+<div id="result">
+    <h3>任务状态</h3>
+    <input type="button" value="提交任务" class="commit" onclick="commitJob()"/>
+    <input type="button" value="删除任务" class="commit" onclick="deleteJob()"/>
+    <input type="button" value="刷新" class="commit" onclick="update_job_status()"/>
+    <table class="dataintable" id="restatus" >
+        <tr>
+            <th>任务名</th>
+            <th>任务状态</th>
+            <th>下载结果</th>
+            <th>创建时间</th>
+             <th width="10%">选择</th>
+        </tr>
+            {% for result in results %}
+                <tr>
+                    <td>{{ result.jobname }}</td>
+                    <td>{{ result.jobstatus }}</td>
+                    <td><a href={{ result.result }} target="_blank" title="">任务结果</a></td>
+                    <td>{{ result.create_time }}</td>
+                    <td><input type="checkbox" name="result" value={{ result.jobname }}></td>
+                </tr>
+            {% endfor %}
+    </table>
+</div>
+
+</div>
+
+
+<div id="footer">
+IMATH@SYSU
+</div>
+</body>
+</html>

@@ -1,0 +1,297 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf8">
+    <title>Manage</title>
+    <link rel="icon" href="../static/sysu.ico" type="image/x-icon"/>
+    <script>
+        xmlhttp=null;
+        if (window.XMLHttpRequest)
+        {xmlhttp=new XMLHttpRequest();}
+        else if (window.ActiveXObject)
+        {xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");}
+
+        var rm_img_url = "/rm_imgs?imgsname="
+        var rm_video_url = "/rm_videos?videosname="
+
+        function manage(){
+            location.href = "/manage";
+        }
+        function compare_imgs(){
+            location.href = "/compare_imgs";
+        }
+        function compare_videos(){
+            location.href = "/compare_videos";
+        }
+        function algorithms(){
+            location.href = "/algorithms"
+        }
+        function group(){
+            location.href = "/group"
+        }
+        function cancelAllImg(){
+            var checkBoxArr=document.getElementsByName("img");
+            for (var i =0; i <checkBoxArr.length; i++) {
+                checkBoxArr[i].checked=(!checkBoxArr[i].checked);
+          }
+        }
+        function cancelAllVideo(){
+            var checkBoxArr=document.getElementsByName("video");
+            for (var i =0; i <checkBoxArr.length; i++) {
+                checkBoxArr[i].checked=(!checkBoxArr[i].checked);
+          }
+        }
+        function chooseAllImg(){
+            var checkBoxArr = document.getElementsByName("img");
+            for (var i = 0; i < checkBoxArr.length; i++) {
+                checkBoxArr[i].checked = "true";
+            }
+        }
+        function chooseAllVideo(){
+            var checkBoxArr = document.getElementsByName("video");
+            for (var i = 0; i < checkBoxArr.length; i++) {
+                checkBoxArr[i].checked = "true";
+            }
+        }
+
+        function selected(id){
+          var checkBoxArr = document.getElementsByName(id);
+          var str = "";
+          for (var i = 0; i < checkBoxArr.length; i++) {
+              if(checkBoxArr[i].checked){
+
+                  str+=checkBoxArr[i].value+",";
+              }
+        	}
+          str=str.substring(0,str.length-1);
+          return str
+        }
+
+        function response(){
+            if (xmlhttp.readyState==4)
+            {
+                if (xmlhttp.status==200)
+                {
+                    status = JSON.parse(xmlhttp.responseText);
+                    if (status.succ == true ){alert("删除成功！")}
+                    else{alert("删除失败！")}
+                }
+                else{alert("删除失败！");}
+            }
+        }
+
+        function clearImg(){
+            url=rm_img_url+selected("img");
+            xmlhttp.onreadystatechange=response;
+            xmlhttp.open("GET",url,true);
+            xmlhttp.send(null);
+            location=location;
+        }
+        function clearVideo(){
+            url=rm_video_url+selected("video");
+            xmlhttp.onreadystatechange=response;
+            xmlhttp.open("GET",url,true);
+            xmlhttp.send(null);
+            location=location;
+        }
+    </script>
+<style>
+button{
+    width:100%;
+    height:60px;
+    margin : 0px 0px 0px 0px;
+    background-color:transparent;
+    font-size:20px;
+}
+
+#header {
+    background-color:#2F4F4F;
+    color:white;
+    text-align:center;
+    padding:5px;
+    height:10%;
+}
+#nav {
+    line-height:30px;
+    background-color:#4f6b72;
+    min-height:700px;
+    max-height:700px;
+    width:20%;
+    float:left;
+    padding:0px;
+}
+#section {
+    background-color:#EEEEEE;
+    width:80%;
+    min-height:700px;
+    max-height:700px;
+    float:left;
+    padding:0px;
+    overflow-y:scroll;
+}
+#footer {
+    background-color:#2F4F4F;
+    color:white;
+    clear:both;
+    text-align:center;
+    height:5%;
+    padding:5px;
+    bottom:0;right:0
+}
+#img{
+    clear:both;
+    background-color:#EEEEEE;
+    text-align:center;
+    height:100%;
+    width:50%;
+    float:left;
+    border:0px solid #000;
+}
+#video{
+    background-color:#EEEEEE;
+    height:100%;
+    text-align:center;
+    width:50%;
+    float:left;
+    border:0px solid #000;
+}
+
+form{
+    align:center
+
+}
+.file{
+    width:100%;
+    height:40px;
+    float:left;
+    margin :0px 0px 5px 0px;
+}
+.submit{
+    width:25%;
+    height:40px;
+    float:left;
+    margin :5px 0px 5px 0px;
+}
+
+table.dataintable {
+  margin-top:15px;
+  border-collapse:collapse;
+  border:1px solid #aaa;
+  width:100%;
+  font-size:12px;
+  color:#2F4F4F;
+}
+
+table.dataintable th {
+  vertical-align:baseline;
+  padding:5px 15px 5px 6px;
+  border:1px solid #aaa;
+  text-align:center;
+}
+table.dataintable td {
+  padding:6px 15px 6px 6px;
+  border:1px solid #aaa;
+  vertical-align: middle;
+  text-align: center;
+}
+
+checkbox{
+    width:40px;
+    height:40px;
+}
+
+
+h3 {
+    border-color:#DCDCDC;
+    width:100%;
+    height:40px;
+    float:left;
+    vertical-align: middle;
+    margin :5px 0px 0px 0px;
+  }
+
+
+
+</style>
+</head>
+
+<body>
+<div id="header">
+<h1 align="center">FaceMate系统</h1>
+</div>
+
+<div id="nav">
+<button type="button" onclick="manage()">数据管理</button><br>
+<button type="button" onclick="compare_imgs()">图像识别</button><br>
+<button type="button" onclick="compare_videos()">视频识别</button><br>
+<button type="button" onclick="algorithms()">算法说明</button><br>
+<button type="button" onclick="group()">团队说明</button><br>
+</div>
+
+<div id="section">
+	<div id="img">
+		<h3>图像数据</h3>
+               <form method="POST" enctype="multipart/form-data" >
+                <input type="file" name="img" multiple="multiple" class="file"/>
+                     <input type="submit" value="提交" class="submit" />
+                    <input type="button" value="全选" class="submit" onclick="chooseAllImg()" />
+                   <input type="button" value="反选" class="submit" onclick="cancelAllImg()" />
+                     <input type="button" value="删除" class="submit" onclick="clearImg()" />
+                </form>
+
+<table class="dataintable">
+<tr>
+    <th>图片</th>
+    <th>图片名</th>
+    <th>选择</th>
+</tr>
+            <div id="imgdata">
+{% for img in imgs %}
+<tr>
+    <td><img width="100px" height="80px" src={{ img[0] }}></td>
+    <td>{{ img[1] }}</td>
+    <td><input type="checkbox" name="img" value={{ img[1] }}></td>
+</tr>
+{% endfor %}
+        </div>
+</table>
+    </div>
+
+    <div id="video">
+		<h3>视频数据</h3>
+               <form method="POST" enctype="multipart/form-data" >
+                <input type="file" name="video" multiple="multiple" class="file"/>
+                     <input type="submit" value="提交" class="submit" />
+                    <input type="button" value="全选" class="submit" onclick="chooseAllVideo()"/>
+                   <input type="button" value="反选" class="submit"  onclick="cancelAllVideo()"/>
+                     <input type="button" value="删除" class="submit" onclick="clearVideo()" />
+                </form>
+<table class="dataintable" id="videodata" >
+<tr>
+  <th>视频</th>
+  <th>视频名</th>
+      <th>选择</th>
+</tr>
+            <div >
+{% for video in videos %}
+<tr>
+    <td>
+        <video width="100px" height="80px" src={{ video[0] }} controls="controls"/>
+</td>
+    <td>{{ video[1] }}</td>
+    <td><input type="checkbox" name="video" value={{ video[1] }}></td>
+</tr>
+{% endfor %}
+</div>
+</table>
+    </div>
+
+
+
+</div>
+<div id="footer">
+IMATH@SYSU
+</div>
+</body>
+</html>

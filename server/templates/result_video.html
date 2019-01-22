@@ -1,0 +1,72 @@
+<html>
+<head>
+        <meta charset="utf-8">
+        <title>VideoResult</title>
+    <link rel="icon" href="../static/sysu.ico" type="image/x-icon"/>
+<title></title>
+<style type="text/css">
+    .table
+    {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    }
+    th {
+    font: bold 18px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+    color: #4f6b72;
+    border-right: 1px solid #C1DAD7;
+    border-bottom: 1px solid #C1DAD7;
+    border-top: 1px solid #C1DAD7;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-align: left;
+    padding: 6px 6px 6px 12px;
+    background: #CAE8EA no-repeat;
+    }
+    td {
+    border-right: 1px solid #C1DAD7;
+    border-bottom: 1px solid #C1DAD7;
+    background: #fff;
+    font-size:18px;
+    padding: 6px 6px 6px 12px;
+    color: #4f6b72;
+    }
+    td.alt {
+    background: #F5FAFA;
+    color: #797268;
+    }
+    th.spec,td.spec {
+    border-left: 1px solid #C1DAD7;
+    }
+    html>body td{ font-size:18px;}
+    tr.select th,tr.select td
+    {
+    background-color:#CAE8EA;
+    color: #797268;
+    }
+</style>
+</head>
+<body>
+<h2 align="center">视频识别结果</h2>
+<a href=" {{ result_url }} "> 下载明细</a>
+<p>您在本次提交的多张照片必须为同一个人的不同角度照片才能保证结果的有效性</p>
+<table class="table" cellspacing="0">
+<tr>
+    <th class="spec">视频名</th>
+    <th>图片名</th>
+    <th>相似区间</th><th>最大相似度</th>
+    <th>相似程度</th><th>相似照片</th>
+</tr>
+    {% for result in results %}
+<tr>
+    <td>{{ result[0] }}</td>
+    <td>{{ result[1] }}</td>
+    <td>{{ result[2] }}</td>
+    <td>{{ result[3] }}</td>
+    <td>{{ result[4] }}</td>
+    <td><img width="80px" height="60px" src={{ result[5] }}></td>
+</tr>
+{% endfor %}
+</table>
+</body>
+</html>
